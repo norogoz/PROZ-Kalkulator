@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author Unquadhexium
+ *
+ */
+module kalkulator {
+}
