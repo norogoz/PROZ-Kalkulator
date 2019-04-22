@@ -1,0 +1,41 @@
+.window {
+	-fx-background-color: white;
+}
+
+.button {
+	-fx-font-size:	25pt;
+	-fx-background-color: white;
+	-fx-border-color: gray;
+	-fx-border-width: 1px;
+	-fx-font-family: "Arial";
+	-fx-text-fill:  black;
+}
+.operation {
+	-fx-background-color: #efff60;
+}
+
+.button:hover {
+	-fx-background-color: #efefef;
+}
+.operation:hover {
+	-fx-background-color: #ffe44f;
+}
+
+.button:pressed {
+	-fx-background-color: #dbdbdb;
+}
+.operation:pressed {
+	-fx-background-color: #ffc74f;
+}
+
+.button:focused {
+	-fx-border-color: black;
+}
+
+.result {
+	-fx-font-family: "Arial";
+	-fx-background-color: white;
+	-fx-font-size: 35pt;
+	-fx-border-width: 1;
+	-fx-border-color: gray;
+}

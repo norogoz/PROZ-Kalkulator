@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author Unquadhexium
- *
- */
-module kalkulator {
-}

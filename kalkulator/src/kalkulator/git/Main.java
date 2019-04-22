@@ -1,9 +1,23 @@
 package kalkulator.git;
 
-public class Main {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.*;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Parent root = FXMLLoader.load(getClass().getResource("application.fxml"));
+		primaryStage.setScene(new Scene(root));
+		primaryStage.setTitle("Kalkulator");
+		primaryStage.show();
+
+	}
 
 	public static void main(String[] args) {
-		System.out.println("Java Project");
+		launch(args);
 
 	}
 
