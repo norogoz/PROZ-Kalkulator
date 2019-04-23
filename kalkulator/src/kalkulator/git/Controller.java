@@ -1,6 +1,7 @@
 package kalkulator.git;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import javafx.fxml.*;
@@ -50,139 +51,113 @@ public class Controller implements Initializable {
 	@FXML
 	private Button percent;
 	@FXML
-	private Button sign;
-	@FXML
 	private Button equals;
+	@FXML
+	private Button sign;
 	@FXML
 	private Button erase;
 	@FXML
 	private Button ac;
 
-	private long number1 = 0;
-	private String operator = "";
+	private double number1 = 0;
+	private double numbertmp = 0;
 	private boolean clean = true;
+	private DecimalFormat df = new DecimalFormat("#.######");
+
+	private String operator = "";
+
 	private Model model = new Model();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		output.setEditable(false);
 		output.setText("");
 
-		zero.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 0);
-		});
+		zero.setOnAction(e -> writeNumber("0"));
+		one.setOnAction(e -> writeNumber("1"));
+		two.setOnAction(e -> writeNumber("2"));
+		three.setOnAction(e -> writeNumber("3"));
+		four.setOnAction(e -> writeNumber("4"));
+		five.setOnAction(e -> writeNumber("5"));
+		six.setOnAction(e -> writeNumber("6"));
+		seven.setOnAction(e -> writeNumber("7"));
+		eight.setOnAction(e -> writeNumber("8"));
+		nine.setOnAction(e -> writeNumber("9"));
+		point.setOnAction(e -> writeNumber("."));
 
-		one.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 1);
+		plus.setOnAction(e -> setOperator("+"));
+		minus.setOnAction(e -> setOperator("-"));
+		mul.setOnAction(e -> setOperator("x"));
+		div.setOnAction(e -> setOperator("/"));
 
-		});
-		two.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 2);
+		equals.setOnAction(e -> getResult(operator));
+		percent.setOnAction(e -> getResult("%"));
+		square.setOnAction(e -> getResult("square"));
+		sqrt.setOnAction(e -> getResult("sqrt"));
+		fac.setOnAction(e -> getResult("!"));
 
-		});
-		three.setOnAction(e -> {
+		sign.setOnAction(e -> {
 			if (clean) {
 				output.setText("");
 				clean = false;
 			}
-			output.setText(output.getText() + 3);
-
-		});
-		four.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 4);
-		});
-		five.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 5);
-		});
-		six.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 6);
-
-		});
-		seven.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 7);
-
-		});
-		eight.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 8);
-
-		});
-		nine.setOnAction(e -> {
-			if (clean) {
-				output.setText("");
-				clean = false;
-			}
-			output.setText(output.getText() + 9);
-
-		});
-		point.setOnAction(e -> {
-			if (clean)
-				return;
-			output.setText(output.getText() + ".");
-		});
-		plus.setOnAction(e -> {
-			operator = "+";
-			number1 = Long.parseLong(output.getText());
-			clean = true;
-		});
-		minus.setOnAction(e -> {
-			operator = "-";
-			number1 = Long.parseLong(output.getText());
-			clean = true;
-		});
-		mul.setOnAction(e -> {
-			operator = "x";
-			number1 = Long.parseLong(output.getText());
-			clean = true;
-		});
-		div.setOnAction(e -> {
-			operator = "/";
-			number1 = Long.parseLong(output.getText());
-			clean = true;
-		});
-		equals.setOnAction(e -> {
-			if (!operator.isEmpty() && !output.getText().isEmpty()) {
-				output.setText(String.valueOf(model.calculate(number1, Long.parseLong(output.getText()), operator)));
-				clean = true;
-				operator = "";
-			}
+			if (!output.getText().isEmpty() && "-".equals(output.getText().substring(0, 1))) {
+				output.setText(output.getText().substring(1, output.getLength()));
+			} else
+				output.setText("-" + output.getText());
 		});
 
 		erase.setOnAction(e -> {
 			if (!output.getText().isEmpty())
 				output.setText(output.getText().substring(0, output.getLength() - 1));
+			operator = "";
+			clean = false;
 		});
+
+		ac.setOnAction(e -> {
+			number1 = 0;
+			numbertmp = 0;
+			operator = "";
+			output.setText("");
+		});
+	}
+
+	private void writeNumber(String num) {
+		if (clean) {
+			output.setText("");
+			clean = false;
+		}
+		output.setText(output.getText() + num);
+	}
+
+	private void setOperator(String op) {
+		if (output.getText().isEmpty())
+			return;
+		operator = op;
+		number1 = Double.parseDouble(output.getText());
+		clean = true;
+	}
+
+	private void getResult(String op) {
+		if (output.getText().isEmpty())
+			return;
+		numbertmp = Double.parseDouble(output.getText());
+
+		switch (op) {
+		case "+":
+		case "-":
+		case "x":
+		case "/":
+		case "%":
+		case "square":
+		case "sqrt":
+		case "!":
+			output.setText(df.format(model.calculate(number1, numbertmp, op)));
+			break;
+		}
+
+		clean = true;
+		number1 = numbertmp;
+		operator = "";
 	}
 
 }
