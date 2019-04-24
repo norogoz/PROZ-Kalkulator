@@ -6,7 +6,7 @@ import javafx.scene.*;
 import javafx.stage.Stage;
 
 /**
- * Main class being 'view' component of MVC pattern.
+ * Sets up stage and key listening.
  * 
  * @author Grzegorz Norbert Rogozinski
  *
@@ -19,11 +19,16 @@ public class Main extends Application {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("application.fxml"));
-		loader.setController(new Controller());
+		
+		Controller controller = new Controller();
+		loader.setController(controller);
 
 		Parent root = loader.load();
+		Scene scene = new Scene(root);
+		
+		scene.setOnKeyPressed(e -> controller.keyPressed(e));
 
-		primaryStage.setScene(new Scene(root));
+		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.setTitle("Kalkulator");
 		primaryStage.show();
