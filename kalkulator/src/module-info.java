@@ -5,6 +5,7 @@ module kalkulator {
 	requires javafx.controls;
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
+	requires jdk.jshell;
 
 	opens kalkulator.git to javafx.fxml;
 }

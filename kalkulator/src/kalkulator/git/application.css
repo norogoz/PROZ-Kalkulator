@@ -35,7 +35,7 @@
 .result {
 	-fx-font-family: "Arial";
 	-fx-background-color: white;
-	-fx-font-size: 35pt;
+	-fx-font-size: 21pt;
 	-fx-border-width: 1;
 	-fx-border-color: gray;
 }

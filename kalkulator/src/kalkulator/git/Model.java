@@ -1,45 +1,29 @@
 package kalkulator.git;
 
+import java.util.List;
+import jdk.jshell.JShell;
+import jdk.jshell.SnippetEvent;
+
 public class Model {
 
-	public double calculate(double number1, double number2, String operator) {
-		Double result = 0.0;
+	private JShell jshell;
 
-		switch (operator) {
-		case "+":
-			result = number1 + number2;
-			break;
-		case "-":
-			result = number1 - number2;
-			break;
-		case "x":
-			result = number1 * number2;
-			break;
-		case "/":
-			result = number1 / number2;
-			break;
-		case "%":
-			result = number2 / 100;
-			break;
-		case "square":
-			result = number2 * number2;
-			break;
-		case "sqrt":
-			result = Math.sqrt(number2);
-			break;
-		case "!":
-			result = fac(number2);
-			break;
-		default:
-			System.out.println("Unknown operator " + operator);
-		}
-		return result;
+	public Model() {
+		jshell = JShell.create();
 	}
-	
-	private double fac(double n) {
-	    if (n <= 2) {
-	        return n;
-	    }
-	    return n * fac(n - 1);
+
+	public String calculate(String expression) throws Exception {
+
+		List<SnippetEvent> events = jshell.eval(expression);
+		SnippetEvent e = events.get(events.size() - 1);
+
+		System.out.println(e.value());
+
+		if (e.value() == null || e.value().equals("NaN"))
+			throw new Exception("Wrong expression: " + expression);
+		if (e.value().equals("Infinity"))
+			throw new Exception("Out of bounds");
+		return e.value();
 	}
+
 }

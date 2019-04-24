@@ -1,11 +1,11 @@
 package kalkulator.git;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import javafx.fxml.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 
 public class Controller implements Initializable {
 
@@ -59,18 +59,19 @@ public class Controller implements Initializable {
 	@FXML
 	private Button ac;
 
-	private double number1 = 0;
-	private double numbertmp = 0;
-	private boolean clean = true;
-	private DecimalFormat df = new DecimalFormat("#.######");
-
+	private String num1 = "";
+	private String num2 = "";
 	private String operator = "";
+	private String expression = "";
+	private boolean clean = true;
 
 	private Model model = new Model();
+	private Alert alert = new Alert(AlertType.ERROR);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		output.setText("");
+		alert.setHeaderText(null);
 
 		zero.setOnAction(e -> writeNumber("0"));
 		one.setOnAction(e -> writeNumber("1"));
@@ -86,7 +87,7 @@ public class Controller implements Initializable {
 
 		plus.setOnAction(e -> setOperator("+"));
 		minus.setOnAction(e -> setOperator("-"));
-		mul.setOnAction(e -> setOperator("x"));
+		mul.setOnAction(e -> setOperator("*"));
 		div.setOnAction(e -> setOperator("/"));
 
 		equals.setOnAction(e -> getResult(operator));
@@ -114,14 +115,16 @@ public class Controller implements Initializable {
 		});
 
 		ac.setOnAction(e -> {
-			number1 = 0;
-			numbertmp = 0;
+			num1 = "";
+			num2 = "";
 			operator = "";
 			output.setText("");
 		});
 	}
 
 	private void writeNumber(String num) {
+		if (num.equals(".") && output.getText().contains("."))
+			return;
 		if (clean) {
 			output.setText("");
 			clean = false;
@@ -133,30 +136,49 @@ public class Controller implements Initializable {
 		if (output.getText().isEmpty())
 			return;
 		operator = op;
-		number1 = Double.parseDouble(output.getText());
+		num1 = output.getText();
 		clean = true;
 	}
 
 	private void getResult(String op) {
 		if (output.getText().isEmpty())
 			return;
-		numbertmp = Double.parseDouble(output.getText());
+		num2 = output.getText();
 
-		switch (op) {
-		case "+":
-		case "-":
-		case "x":
-		case "/":
-		case "%":
-		case "square":
-		case "sqrt":
-		case "!":
-			output.setText(df.format(model.calculate(number1, numbertmp, op)));
-			break;
+		try {
+			switch (op) {
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+				output.setText(model.calculate(num1 + "d" + op + num2 + "d"));
+				break;
+			case "%":
+				output.setText(model.calculate(num2 + "d" + "/" + 100d));
+				break;
+			case "square":
+				output.setText(model.calculate(num2 + "d*" + num2 + "d"));
+				break;
+			case "sqrt":
+				output.setText(model.calculate("Math.sqrt(" + num2 + "d)"));
+				break;
+			case "!":
+				expression = "1d";
+				for (int i = Integer.parseUnsignedInt(num2); i > 1; --i) {
+					expression += "*" + i + "d";
+				}
+				output.setText(model.calculate(expression));
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			output.setText("Error");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		}
 
 		clean = true;
-		number1 = numbertmp;
+		num1 = num2;
 		operator = "";
 	}
 
