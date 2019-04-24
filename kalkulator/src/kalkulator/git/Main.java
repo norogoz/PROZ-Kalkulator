@@ -5,6 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.stage.Stage;
 
+/**
+ * Main class being 'view' component of MVC pattern.
+ * 
+ * @author Grzegorz Norbert Rogozinski
+ *
+ */
+
 public class Main extends Application {
 
 	@Override

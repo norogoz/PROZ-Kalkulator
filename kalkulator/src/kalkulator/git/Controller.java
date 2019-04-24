@@ -7,6 +7,12 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * Allows for user input, parses it and shows alerts
+ * 
+ * @author Grzegorz Norbert Rogozinski
+ */
+
 public class Controller implements Initializable {
 
 	@FXML
@@ -68,6 +74,15 @@ public class Controller implements Initializable {
 	private Model model = new Model();
 	private Alert alert = new Alert(AlertType.ERROR);
 
+	/**
+	 * Called to initialize a controller after its root element has been completely
+	 * processed.
+	 * 
+	 * @param location  The location used to resolve relative paths for the root
+	 *                  object, or null if the location is not known.
+	 * @param resources The resources used to localize the root object, or null if
+	 *                  the root object was not localized.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		output.setText("");
@@ -122,6 +137,11 @@ public class Controller implements Initializable {
 		});
 	}
 
+	/**
+	 * Outputs given character to TextField output.
+	 * 
+	 * @param num character to write
+	 */
 	private void writeNumber(String num) {
 		if (num.equals(".") && output.getText().contains("."))
 			return;
@@ -132,6 +152,11 @@ public class Controller implements Initializable {
 		output.setText(output.getText() + num);
 	}
 
+	/**
+	 * Stores given String in String operator for later use.
+	 * 
+	 * @param op String to store.
+	 */
 	private void setOperator(String op) {
 		if (output.getText().isEmpty())
 			return;
@@ -140,6 +165,12 @@ public class Controller implements Initializable {
 		clean = true;
 	}
 
+	/**
+	 * Parses expression and uses Model to calculate its value, shows alert if
+	 * exception is caught.
+	 * 
+	 * @param op operator used in calculations.
+	 */
 	private void getResult(String op) {
 		if (output.getText().isEmpty())
 			return;
