@@ -13,6 +13,7 @@ import jdk.jshell.SnippetEvent;
 public class Model {
 
 	private JShell jshell;
+	private String value = "";
 
 	public Model() {
 		jshell = JShell.create();
@@ -26,18 +27,20 @@ public class Model {
 	 * @throws Exception if expression is constructed erroneously or result is out
 	 *                   of bounds.
 	 */
-	public String calculate(String expression) throws Exception {
+	public String calculate(String expression) throws ArithmeticException {
 
 		List<SnippetEvent> events = jshell.eval(expression);
 		SnippetEvent e = events.get(events.size() - 1);
 
-		System.out.println(e.value());
+		value = e.value();
+		
+		System.out.println(value);
 
-		if (e.value() == null || e.value().equals("NaN"))
-			throw new Exception("Wrong expression: " + expression);
-		if (e.value().equals("Infinity"))
-			throw new Exception("Out of bounds");
-		return e.value();
+		if (value == null || value.equals("NaN"))
+			throw new ArithmeticException("Operation not allowed or invalid expression: " + expression);
+		if (value.equals("Infinity"))
+			throw new ArithmeticException("Out of bounds");
+		return value;
 	}
 
 }

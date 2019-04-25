@@ -141,9 +141,9 @@ public class Controller implements Initializable {
 	}
 
 	/**
-	 * Fires a button depending on given KeyCode
+	 * Fires a button depending on given KeyCode.
 	 * 
-	 * @param e KeyEvent of a key press
+	 * @param e KeyEvent of a key press.
 	 */
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()) {
@@ -254,10 +254,10 @@ public class Controller implements Initializable {
 	 * @param op String to store.
 	 */
 	private void setOperator(String op) {
-		if (output.getText().isEmpty())
+		num1 = output.getText();
+		if (num1.isEmpty() || num1.equals("-"))
 			return;
 		operator = op;
-		num1 = output.getText();
 		clean = true;
 	}
 
@@ -269,7 +269,7 @@ public class Controller implements Initializable {
 	 */
 	private void getResult(String op) {
 		num2 = output.getText();
-		if (num2.isEmpty())
+		if (num2.isEmpty() || num2.equals("-"))
 			return;
 
 		try {
@@ -302,7 +302,17 @@ public class Controller implements Initializable {
 			}
 			output.setText(model.calculate(expression));
 
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+
+			output.setText("Error");
+
+			alert.setContentText("Operation not allowed");
+			alert.showAndWait();
+
+			output.setText("");
+
+		} catch (ArithmeticException e) {
 			e.printStackTrace();
 
 			output.setText("Error");
@@ -312,7 +322,6 @@ public class Controller implements Initializable {
 
 			output.setText("");
 		}
-
 		clean = true;
 		num1 = num2;
 		operator = "";
