@@ -33,7 +33,7 @@ public class Model {
 		SnippetEvent e = events.get(events.size() - 1);
 
 		value = e.value();
-		
+
 		System.out.println(value);
 
 		if (value == null || value.equals("NaN"))

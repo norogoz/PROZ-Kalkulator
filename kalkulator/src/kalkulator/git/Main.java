@@ -19,13 +19,13 @@ public class Main extends Application {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("application.fxml"));
-		
+
 		Controller controller = new Controller();
 		loader.setController(controller);
 
 		Parent root = loader.load();
 		Scene scene = new Scene(root);
-		
+
 		scene.setOnKeyPressed(e -> controller.keyPressed(e));
 
 		primaryStage.setScene(scene);

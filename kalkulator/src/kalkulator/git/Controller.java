@@ -141,7 +141,7 @@ public class Controller implements Initializable {
 	}
 
 	/**
-	 * Fires a button depending on given KeyCode.
+	 * Fires a button related to KeyEvent's KeyCode.
 	 * 
 	 * @param e KeyEvent of a key press.
 	 */
@@ -282,7 +282,7 @@ public class Controller implements Initializable {
 				expression = num1 + "d" + op + num2 + "d";
 				break;
 			case "%":
-				expression = num2 + "d" + "/" + 100d;
+				expression = num2 + "d/100d";
 				break;
 			case "square":
 				expression = num2 + "d*" + num2 + "d";
@@ -291,40 +291,62 @@ public class Controller implements Initializable {
 				expression = "Math.sqrt(" + num2 + "d)";
 				break;
 			case "!":
-				num2 = num2.replaceAll("[.]0*$", "");
-				expression = "1d";
-				for (int i = Integer.parseUnsignedInt(num2); i > 1; --i) {
-					expression += "*" + i + "d";
-				}
+				expression = factorialExpression(num2);
 				break;
 			default:
 				return;
 			}
+			
 			output.setText(model.calculate(expression));
-
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-
-			output.setText("Error");
-
-			alert.setContentText("Operation not allowed");
-			alert.showAndWait();
-
-			output.setText("");
 
 		} catch (ArithmeticException e) {
 			e.printStackTrace();
-
-			output.setText("Error");
-
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-
-			output.setText("");
+			showAlert(e.getMessage());
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			showAlert("Operation not allowed; number is too big or format is incorrect");
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert("Unexpected error");
 		}
 		clean = true;
 		num1 = num2;
 		operator = "";
+	}
+
+	/**
+	 * Shows error alert with specified content text.
+	 * 
+	 * @param contentText Text to set.
+	 */
+	private void showAlert(String contentText) {
+		output.setText("Error");
+		alert.setContentText(contentText);
+		alert.showAndWait();
+		output.setText("");
+	}
+
+	/**
+	 * Converts number stored as String to expression "1d*2d*3d...".
+	 * 
+	 * @param number String with number to convert.
+	 * @return Expression ready to use in JShell.
+	 * @throws NumberFormatException When number is not convertable to UnsignedInt
+	 *                               or is too big.
+	 */
+	private String factorialExpression(String number) throws NumberFormatException {
+		String result = "";
+		number = number.replaceFirst("[.]0*$", "");
+		int i = Integer.parseUnsignedInt(number);
+
+		if (i > 170)
+			throw new NumberFormatException("Number is too big");
+
+		result = "1d";
+		for (; i > 1; --i) {
+			result += "*" + i + "d";
+		}
+		return result;
 	}
 
 }
