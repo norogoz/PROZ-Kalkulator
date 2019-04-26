@@ -1,0 +1,4 @@
+jlink --module-path "%JAVA_HOME%\jmods;C:\Program Files\Java\javafx-jmods-12.0.1";"%cd%\kalkulator\bin" --add-modules kalkulator --launcher VERSION=kalkulator/kalkulator.git.Main --output "%cd%\kalkulator\bin\jre"
+
+download jmods-12.0.1 from https://gluonhq.com/products/javafx/
+this commands assumes it's unpacked to C:\Program Files\Java
