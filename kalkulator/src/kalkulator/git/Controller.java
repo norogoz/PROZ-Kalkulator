@@ -279,16 +279,16 @@ public class Controller implements Initializable {
 			case "-":
 			case "*":
 			case "/":
-				expression = num1 + "d" + op + num2 + "d";
+				expression = num1 + op + num2;
 				break;
 			case "%":
-				expression = num2 + "d/100d";
+				expression = num2 + "/100";
 				break;
 			case "square":
-				expression = num2 + "d*" + num2 + "d";
+				expression = num2 + "*" + num2;
 				break;
 			case "sqrt":
-				expression = "Math.sqrt(" + num2 + "d)";
+				expression = "Math.sqrt(" + num2 + ")";
 				break;
 			case "!":
 				expression = factorialExpression(num2);
@@ -342,9 +342,9 @@ public class Controller implements Initializable {
 		if (i > 170)
 			throw new NumberFormatException("Number is too big");
 
-		result = "1d";
+		result = "1";
 		for (; i > 1; --i) {
-			result += "*" + i + "d";
+			result += "*" + i;
 		}
 		return result;
 	}

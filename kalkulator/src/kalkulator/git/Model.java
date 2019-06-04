@@ -1,8 +1,13 @@
 package kalkulator.git;
 
-import java.util.List;
-import jdk.jshell.JShell;
-import jdk.jshell.SnippetEvent;
+//import java.util.List;
+//import jdk.jshell.JShell;
+//import jdk.jshell.SnippetEvent;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Manages given data to return calculation result.
@@ -12,11 +17,15 @@ import jdk.jshell.SnippetEvent;
 
 public class Model {
 
-	private JShell jshell;
+	//private JShell jshell;
 	private String value = "";
+	private Client client;
+	private WebTarget webTarget;
+	
 
 	public Model() {
-		jshell = JShell.create();
+		//jshell = JShell.create();
+		client = ClientBuilder.newClient();
 	}
 
 	/**
@@ -29,17 +38,23 @@ public class Model {
 	 */
 	public String calculate(String expression) throws ArithmeticException {
 
-		List<SnippetEvent> events = jshell.eval(expression);
-		SnippetEvent e = events.get(events.size() - 1);
-
-		value = e.value();
-
+		//List<SnippetEvent> events = jshell.eval(expression);
+		//SnippetEvent e = events.get(events.size() - 1);
+		//value = e.value();
+		
+		//webTarget = client.target("http://localhost:8080/docker/calculate/" + expression.replaceAll("[+]","%2B").replaceAll("[/]","%2F"));
+		//value = webTarget.request(MediaType.APPLICATION_JSON).get(String.class);
+		
+		webTarget = client.target("http://localhost:8080/docker/calculate/post");
+		value = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(expression, MediaType.APPLICATION_JSON), String.class);
+		
 		System.out.println(value);
 
 		if (value == null || value.equals("NaN"))
 			throw new ArithmeticException("Operation not allowed or invalid expression: " + expression);
 		if (value.equals("Infinity"))
-			throw new ArithmeticException("Out of bounds");
+			throw new ArithmeticException("Out of bounds");	
+		
 		return value;
 	}
 
