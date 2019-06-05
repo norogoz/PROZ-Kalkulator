@@ -8,6 +8,7 @@ module kalkulator {
 	requires jdk.jshell;
 	requires java.ws.rs;
 	requires java.scripting;
+	requires gson;
 
 	opens kalkulator.git to javafx.fxml;
 }
